@@ -16,7 +16,9 @@
 <meta property="og:locale" content="ru_RU">
 <meta property="og:image" content="https://tm-g.xyz/images/og.jpg">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="icon" href="/favicon.svg">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta name="yandex-verification" content="c04398cf190402aa">
 <meta name="google-site-verification" content="o49Ym7q_3oqd0ZwT0_iDKNUcBJTMZFgxB0_VBOsp4_c">
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Person", "name": "Артём Гольфингер", "jobTitle": "Графический дизайнер", "url": "https://tm-g.xyz/", "sameAs": ["https://t.me/tm_glfngr"]}</script>
@@ -113,6 +115,8 @@ h2{margin-bottom:32px;font-size:clamp(32px,4.4vw,56px);line-height:1.1;color:var
 .copy{padding:.5em 1em;font-size:14px}
 footer{padding:40px 0 56px;color:var(--muted);font-size:14px}
 footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px}
+footer p{margin:0}
+footer a{color:inherit;text-underline-offset:3px}
 
 /* окно кейса: левая колонка 380px + изображение на всю высоту. При ширине окна 1100px и высоте 720px изображение — квадрат 720×720 */
 dialog{width:min(1100px,calc(100% - 32px));height:min(720px,calc(100dvh - 32px));max-height:none;padding:0;border:0;border-radius:var(--radius);background:var(--surface);color:var(--ink);overflow:hidden}
@@ -153,8 +157,10 @@ dialog[open]{display:grid;grid-template-columns:380px minmax(0,1fr);animation:po
 </script>
 <noscript><div><img src="https://mc.yandex.ru/watch/114092503" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
 <!-- /Yandex.Metrika counter -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-N57W9LLN');</script>
 </head>
 <body>
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-N57W9LLN" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <header>
   <div class="wrap">
@@ -217,7 +223,7 @@ dialog[open]{display:grid;grid-template-columns:380px minmax(0,1fr);animation:po
   </section>
 </main>
 
-<footer><div class="wrap"><span>ИП Гольфингер А. С. · ИНН 1108 0674 5223</span><span>© 2026</span></div></footer>
+<footer><div class="wrap"><div class="foot"><p>ИП Гольфингер А. С. · ИНН 1108 0674 5223</p><p>Политика конфиденциальности</p></div><span>© 2026</span></div></footer>
 
 <dialog id="modal" aria-labelledby="m-title">
   <button class="close" type="button" aria-label="Закрыть" id="m-close">×</button>

@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Генерирует index.html (RU) и en/index.html (EN) из одного шаблона.
 Запуск: python3 build.py  — файлы появятся рядом со скриптом."""
-import json, pathlib
+import json, pathlib, re
 
-SITE = "https://YOUR-DOMAIN.ru/"          # замените на свой домен (нужен для canonical/hreflang)
+SITE = "https://tm-g.xyz/"          # замените на свой домен (нужен для canonical/hreflang)
 IMG = "/images/" 
 RESUME = "https://drive.google.com/file/d/1NBAMx27IJ26ATKZMDvv_NGpCA-mL37s9/view?usp=drive_link"
 CATS = ["marketing", "brand", "print", "web", "motion"]
@@ -11,10 +11,26 @@ DEFAULT_CAT = "marketing"
 
 # ---- SEO и аналитика (пустая строка = функция отключена) ----
 OG_IMAGE = "/images/og.jpg"       # картинка для превью ссылки, 1200x630. Положите файл в images/
-FAVICON = "/favicon.svg"          # файл favicon в корне сайта (.svg или .ico)
-YANDEX_VERIFY = ""                # код из метатега подтверждения Яндекс Вебмастера (если подтверждаете метатегом)
-GOOGLE_VERIFY = ""                # код из метатега Google Search Console
-METRIKA_CODE = ""                 # сюда целиком вставьте код счётчика Яндекс Метрики (с тегами <script> и <noscript>)
+FAVICON = "/favicon.svg"          # SVG-иконка в корне сайта (рекомендуют Яндекс и Google); пустая строка = не подключать
+FAVICON_ICO = "/favicon.ico"      # запасная иконка .ico с размером 48x48 (Safari, старые браузеры); пустая строка = не подключать
+APPLE_ICON = "/apple-touch-icon.png"   # PNG 180x180 для iPhone/iPad; пустая строка = не подключать
+GTM_ID = "GTM-N57W9LLN"           # Google Tag Manager; пустая строка = выключено
+GTM_LANGS = ("ru", "en")          # на каких версиях подключать GTM. Только на английской: ("en",)
+YANDEX_VERIFY = "c04398cf190402aa"                # код из метатега подтверждения Яндекс Вебмастера (если подтверждаете метатегом)
+GOOGLE_VERIFY = "o49Ym7q_3oqd0ZwT0_iDKNUcBJTMZFgxB0_VBOsp4_c"                # код из метатега Google Search Console
+METRIKA_CODE = """<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+    (function(m,e,t,r,i,k,a){
+        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=114092503', 'ym');
+
+    ym(114092503, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/114092503" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->"""                 # сюда целиком вставьте код счётчика Яндекс Метрики (с тегами <script> и <noscript>)
 
 DARK = "--bg:#0e1614;--surface:#15211e;--ink:#e6efec;--muted:#94a8a2;--line:#263631;--accent-text:#52a595;color-scheme:dark;"
 
@@ -23,7 +39,7 @@ T = {
   title="Артём Гольфингер — графический дизайнер",
   desc="Дизайн, который работает одинаково эффективно в digital и офлайне: рекламные креативы, брендинг, соцсети, наружная реклама, полиграфия и сайты.",
   nav=["кейсы", "услуги", "контакты", "резюме ↗"], navlabel="Основная навигация", theme="Сменить тему",
-  hi="👋 Привет! Меня зовут Артём", h1="графический дизайнер",
+  hi="Привет! Меня зовут Артём", h1="графический дизайнер",
   lead="Я создаю дизайн, который работает одинаково эффективно в digital и офлайне — от рекламных креативов, брендинга и соцсетей до наружной рекламы, полиграфии и сайтов.",
   tg="Написать в Telegram", resume="Резюме", portfolio="Портфолио", filters="Фильтр кейсов", all="Все кейсы",
   cats=dict(marketing="Маркетинговый дизайн", brand="Логотипы и брендинг", print="Полиграфия и наружка", web="Сайты и лендинги", motion="Моушн"),
@@ -39,10 +55,10 @@ T = {
  "en": dict(lang="en", path="en/", other="../", other_label="RU", other_title="Русская версия", home="../",
   title="Artem Golfinger — Graphic Designer",
   desc="Design that works equally well in digital and offline: ad creatives, branding, social media, outdoor advertising, print and websites.",
-  nav=["cases", "services", "contact", "résumé ↗"], navlabel="Main navigation", theme="Toggle theme",
-  hi="👋 Hi! My name is Artem", h1="graphic designer",
+  nav=["cases", "services", "contact", "resume ↗"], navlabel="Main navigation", theme="Toggle theme",
+  hi="Hi! My name is Artem", h1="graphic designer",
   lead="I create design that works equally well in digital and offline — from ad creatives, branding and social media to outdoor advertising, print and websites.",
-  tg="Message on Telegram", resume="Résumé", portfolio="Portfolio", filters="Case filter", all="All cases",
+  tg="WhatsApp me", resume="Resume", portfolio="Portfolio", filters="Case filter", all="All cases",
   cats=dict(marketing="Marketing design", brand="Logos and branding", print="Print and outdoor", web="Websites and landing pages", motion="Motion"),
   services_h="What I do",
   services=[("Branding", "Logo, brand identity, visual system."), ("Digital design", "Web banners, social media, digital creatives."),
@@ -51,12 +67,22 @@ T = {
   contact_h="Got a task? Let's turn it into a strong visual solution",
   contact_p="Message me on Telegram or WhatsApp, or send an email — I'll reply and we'll discuss the details.",
   copy="Copy", copied="Copied", fail="Failed",
-  footer="Sole proprietor A. S. Golfinger · INN 1108 0674 5223",
+  footer="Artem Golfinger",
   labels=dict(goal="Goal", task="Task", role="My role", result="Results"), prev="← Previous", next="Next →", close="Close"),
 }
 
-T["ru"].update(person="Артём Гольфингер", job="Графический дизайнер", locale="ru_RU")
-T["en"].update(person="Artem Golfinger", job="Graphic Designer", locale="en_US")
+T["ru"].update(person="Артём Гольфингер", job="Графический дизайнер", locale="ru_RU",
+                msg_url="https://t.me/tm_glfngr", resume_url=RESUME)
+T["en"].update(person="Artem Golfinger", job="Graphic Designer", locale="en_US",
+                msg_url="https://api.whatsapp.com/send/?phone=381637003927&text&type=phone_number&app_absent=0",
+                resume_url="https://drive.google.com/file/d/1Ez2k4Exnvs7BfbY3vz7-wkF6EomK1c9k/view?usp=sharing")
+
+# Политика конфиденциальности в подвале. Вставьте свои адреса между кавычками.
+# Пока адрес пустой, в подвале показывается обычный текст без ссылки.
+PRIVACY = {
+    "ru": ("Политика конфиденциальности", ""),
+    "en": ("Privacy Policy", ""),
+}
 
 # ============================ КЕЙСЫ ============================
 # Добавить кейс  — скопируйте любой блок dict(...) целиком и поменяйте поля.
@@ -69,7 +95,7 @@ T["en"].update(person="Artem Golfinger", job="Graphic Designer", locale="en_US")
 CASES = [
  dict(c="marketing", t="01p.webp", i="01.webp",
   ru=("Веб-баннеры для Helix",
-      "Дизайн рекламных креативов для маркетинговых активностей Helix: важна была не только визуальная часть но и эффективность с точки зрения конверсии.",
+      "Дизайн рекламных креативов для маркетинговых активностей Helix: важна была не только визуальная часть, но и эффективность с точки зрения конверсии.",
       "Разрабатывать визуальные концепции для кампаний и акций и адаптировать их под разные каналы и форматы: РСЯ, геосервисы, соцсети и другие digital-размещения.",
       "Разрабатывал креативы от концепции до готовых макетов с учётом маркетинговых задач. Делал ресайзы и адаптации под форматы и площадки (РСЯ, ГЕО, СММ и др.).",
       "Креативы показывали высокую эффективность. В отдельных кампаниях CTR вырос с 0,1% <b>до 0,5%</b> (РСЯ). Финансовый результат одной из акций — +300% продаж от плана."),
@@ -82,7 +108,7 @@ CASES = [
   ru=("Другие баннеры и рекламные креативы",
       "Разработать эффективные рекламные креативы для бизнеса в разных нишах и под разные маркетинговые задачи.",
       "Создать баннеры и рекламные материалы для разных форматов и каналов с учётом целевой аудитории, задач кампании и требований площадки.",
-      "Вёл проекты с заказчиками End-to-End		. Консультировал по визуальной подаче и предлагал решения для повышения конверсии.",
+      "Вёл проекты с заказчиками End-to-End. Консультировал по визуальной подаче и предлагал решения для повышения конверсии.",
       "Создано большое количество креативов для разных ниш и форматов. Выработан системный подход: визуальная привлекательность сочетается с понятной подачей предложения и маркетинговой эффективностью."),
   en=("Other banners and ad creatives",
       "Develop effective ad creatives for businesses in different niches and for different marketing goals.",
@@ -113,8 +139,8 @@ CASES = [
       "In 4 months after launch: website conversion grew by 12%, followers by 18%, and social media engagement by 15%.")),
  dict(c="brand", t="05p.webp", i="05.webp",
   ru=("Брендинг Go Каяк",
-      "Создать узнаваемый фирменный стиль для сервиса аренды каяков: выделить бренд среди конкурентов и передать ощущение отдыха на природе, надёжности и профессионального сопровождения.",
-      "Проанализировать аудиторию и конкурентов, определить визуальное направление и разработать айдентику, которая сочетает тематику воды и природы с современным профессиональным образом.",
+      "Создать узнаваемый фирменный стиль для сервиса аренды каяков: выделить бренд среди конкурентов и передать ощущение отдыха на природе, надёжности и профессионализма.",
+      "Проанализировать аудиторию и конкурентов, определить визуальное направление и разработать айдентику, которая сочетает тематику воды и природы с современным образом.",
       "Провёл анализ аудитории и конкурентов, разработал концепцию и фирменный стиль: логотип, палитру, типографику и паттерн. Продумал систему визуальных элементов и правила их использования.",
       "Цельная айдентика, объединяющая природу и воду с образом надёжного сервиса. Все элементы систематизированы в едином гайдбуке."),
   en=("Go Kayak branding",
@@ -123,7 +149,7 @@ CASES = [
       "Analyzed the audience and competitors, developed the concept and brand identity: logo, color palette, typography and pattern. Designed the system of visual elements and rules for using them.",
       "A cohesive identity that links nature and water with the image of a reliable service. All brand elements are organized in a single guidebook.")),
  dict(c="brand", t="06p.webp", i="06.webp",
-  ru=("Брендинг Дог Пикник", None, None, None, None), en=("Dog Picnic branding", None, None, None, None)),
+  ru=("Брендинг Дог Пикник", "Заказчику необходима айдентика для проекта. В дизайне нужно было использовать цвета, которые ассоциируются с природой (трава, земля), а также сделать его дружелюбным (пёсики, всё такое). Был предоставлен мудборд.", "Я разработал логотип, подобрал цветовую палитру бренда и выбрал пару гармонирующих друг с другом шрифтов. Кроме того, я подготовил руководство по использованию визуального стиля и создал шаблоны для социальных сетей.", None, None), en=("Dog Picnic branding", "The client needed a visual identity for the project. The design had to use colors associated with nature, such as grass and earth tones, while creating a friendly and welcoming feel through elements like dogs and playful visuals. A moodboard was provided as a reference.", "I developed a logo, selected the brand color palette, and chose a pair of complementary fonts. I also provided guidelines for using the visual identity and created social media templates.", None, None)),
  dict(c="print", t="07p.webp", i="07.webp",
   ru=("Наружная реклама",
       "Дизайн макетов для наружных размещений, которые остаются заметными и легко считываются в условиях города.",
@@ -136,8 +162,8 @@ CASES = [
       "Handled the full layout design: accounted for technical requirements, viewing distance, legibility of details, lighting, weather and placement specifics. For digital screens I also developed short animations and adaptations.",
       "The layouts were placed on outdoor structures and digital screens in busy locations in St. Petersburg, Moscow, Novosibirsk, Makhachkala and other large cities.")),
 dict(c="print", t="08p.webp", i="08.webp",
-  ru=("Название", "Цель", "Задача", "Моя роль", "Результаты"),
-  en=("Title", "Goal", "Task", "My role", "Results")), 
+  ru=("Постер к саммиту Traffic Summit", "", "", "", ""),
+  en=("Traffic Summit Poster", "", "", "", "")), 
 dict(c="print", t="09p.webp", i="09.webp",
   ru=("Полиграфия", None, None, None, None), en=("Print design", None, None, None, None)),
  dict(c="web", t="10p.webp", i="10.webp",
@@ -187,15 +213,13 @@ dict(c="print", t="09p.webp", i="09.webp",
 
  # ---- MOTION: заглушки. Замените названия, тексты, превью (t) и видео (i) на свои ----
  dict(c="motion", t="/images/14p.webp", i="/videos/motion-1.mp4",
-  ru=("Анимированные баннеры для Olymptrade", "Цель проекта: здесь одно-два предложения.", "Задача: что нужно было сделать.", "Моя роль: за что отвечал.", "Результат: что получилось."),
-  en=("Motion case 1 (title)", "Project goal: one or two sentences here.", "Task: what had to be done.", "My role: what I was responsible for.", "Result: what came out of it."),
-  ru_extra=[("Инструменты", "After Effects, Blender, Figma")], en_extra=[("Tools", "After Effects, Blender, Figma")]),
- dict(c="motion", t="/images/motion-2.svg", i="/videos/motion-2.mp4",
-  ru=("s", "Цель проекта: здесь одно-два предложения.", "Задача: что нужно было сделать.", "Моя роль: за что отвечал.", "Результат: что получилось."),
-  en=("Motion case 2 (title)", "Project goal: one or two sentences here.", "Task: what had to be done.", "My role: what I was responsible for.", "Result: what came out of it.")),
- dict(c="motion", t="/images/motion-3.svg", i="/videos/motion-3.mp4",
-  ru=("Моушн-кейс 3 (название)", "Цель проекта: здесь одно-два предложения.", "Задача: что нужно было сделать.", "Моя роль: за что отвечал.", "Результат: что получилось."),
-  en=("Motion case 3 (title)", "Project goal: one or two sentences here.", "Task: what had to be done.", "My role: what I was responsible for.", "Result: what came out of it.")),
+  ru=("Анимированные баннеры для Olymptrade", "Создать современные анимированные рекламные баннеры для продвижения fintech-продукта и привлечения внимания потенциальных пользователей.", "Разработать минималистичные горизонтальные баннеры с акцентом на ключевые преимущества продукта. Продумать плавную анимацию и CTA-элементы, используя современные motion-эффекты без визуальной перегруженности.", "", "Созданы лаконичные анимированные баннеры продолжительностью 5–10 секунд в современном fintech-стиле."),
+  en=("Animated advertising banners for Olymptrade", "Create modern animated advertising banners to promote a fintech product and attract potential users.", "Design minimalist horizontal banners highlighting the product's key benefits. Develop smooth animations and CTA elements, using modern motion effects without making the visuals feel cluttered.", "", "Created clean, minimalist animated banners in a modern fintech style, with a duration of 5–10 seconds."),
+  ru_extra=[("Инструменты", "After Effects")], en_extra=[("Tools", "After Effects")]),
+ dict(c="motion", t="/images/15p.webp", i="/videos/motion-2.mp4",
+  ru=("Баннер для virtualcards", "Повысить эффективность рекламы виртуальных карт за счёт создания яркого и заметного анимационного баннера, способного выделиться среди конкурентов и привлечь внимание аудитории.", "Проанализировать рекламные креативы конкурентов, определить эффективные визуальные приёмы и разработать собственную концепцию баннера. Создать статичный макет и дополнить его простой, но выразительной анимацией.", "", "Создан анимационный рекламный баннер с акцентом на визуальную заметность, понятную подачу предложения и привлечение внимания потенциальных клиентов."),
+  en=("Banner for virtualcards", "Improve the performance of virtual card advertising by creating a bold, eye-catching animated banner that stands out from competitors and attracts the target audience.", "Analyze competitors' advertising creatives, identify effective visual techniques, and develop a unique banner concept. Create a static design and bring it to life with simple yet engaging animation.", "", "Created an animated advertising banner focused on visual impact, clear messaging, and attracting the attention of potential customers."),
+  ru_extra=[("Инструменты", "After Effects, Blender")], en_extra=[("Tools", "After Effects, Blender")]),
 ]
 
 TEMPLATE = r"""<!DOCTYPE html>
@@ -228,7 +252,8 @@ html{scroll-behavior:smooth;scroll-padding-top:84px}
 body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.6 var(--body);-webkit-font-smoothing:antialiased}
 img{display:block;max-width:100%}
 a{color:inherit}
-h1,h2,h3{font-family:var(--head);font-weight:700;margin:0}
+h1,h2,h3{font-family:var(--head);font-weight:700;margin:0;text-wrap:balance}
+p,dd,li{text-wrap:pretty}
 :focus-visible{outline:3px solid var(--accent-text);outline-offset:3px;border-radius:6px}
 .wrap{max-width:1280px;margin:0 auto;padding:0 var(--pad)}
 .btn{display:inline-flex;align-items:center;gap:.5em;padding:.85em 1.5em;border-radius:999px;border:1.5px solid var(--accent);background:none;color:var(--accent-text);font:400 16px var(--body);text-decoration:none;cursor:pointer;transition:background .2s,color .2s}
@@ -256,6 +281,8 @@ nav a[aria-current="true"]{color:var(--accent-text);border-color:var(--accent)}
 
 .hero{padding-block:clamp(40px,10vw,128px) clamp(40px,6vw,72px)}
 .hi{margin:0 0 20px;color:var(--muted)}
+.wave{display:inline-block;transform-origin:70% 70%;animation:wave 2.2s ease-in-out .5s infinite}
+@keyframes wave{0%,60%,100%{transform:rotate(0)}10%{transform:rotate(14deg)}20%{transform:rotate(-8deg)}30%{transform:rotate(14deg)}40%{transform:rotate(-4deg)}50%{transform:rotate(10deg)}}
 h1{font-size:clamp(44px,9vw,120px);line-height:1;letter-spacing:-.01em;max-width:12ch;color:var(--accent-text)}
 .lead{max-width:56ch;margin:32px 0;font-size:clamp(17px,1.6vw,20px);color:var(--muted)}
 .actions{display:flex;flex-wrap:wrap;gap:12px}
@@ -300,6 +327,8 @@ h2{margin-bottom:32px;font-size:clamp(32px,4.4vw,56px);line-height:1.1;color:var
 .copy{padding:.5em 1em;font-size:14px}
 footer{padding:40px 0 56px;color:var(--muted);font-size:14px}
 footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px}
+footer p{margin:0}
+footer a{color:inherit;text-underline-offset:3px}
 
 /* окно кейса: левая колонка 380px + изображение на всю высоту. При ширине окна 1100px и высоте 720px изображение — квадрат 720×720 */
 dialog{width:min(1100px,calc(100% - 32px));height:min(720px,calc(100dvh - 32px));max-height:none;padding:0;border:0;border-radius:var(--radius);background:var(--surface);color:var(--ink);overflow:hidden}
@@ -313,14 +342,16 @@ dialog[open]{display:grid;grid-template-columns:380px minmax(0,1fr);animation:po
 .m-info dd{margin:0;font-size:14px;line-height:1.15}
 .m-nav{display:flex;gap:8px;margin-top:auto;padding-top:8px}
 .m-nav .btn{padding:.6em 1.1em;font-size:14px}
-.m-media{position:relative;background:var(--bg)}
+.m-media{position:relative;overflow:hidden;isolation:isolate;border-radius:0 var(--radius) var(--radius) 0;background:var(--bg)}
 .m-media img,.m-media video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .m-media [hidden]{display:none}
+.m-media img{transition:opacity .2s}
+.m-media img.is-loading{opacity:0}
 .m-media video{cursor:pointer}
 .close{position:absolute;top:12px;right:12px;z-index:2;width:44px;height:44px;border-radius:50%;border:0;background:var(--accent);color:#fff;font-size:24px;line-height:1;cursor:pointer}
 @media(max-width:800px){
   dialog[open]{display:flex;flex-direction:column;height:auto;max-height:calc(100dvh - 32px);overflow-y:auto}
-  .m-media{order:-1;flex:none;aspect-ratio:1/1}
+  .m-media{order:-1;flex:none;aspect-ratio:1/1;border-radius:var(--radius) var(--radius) 0 0}
   .m-info{overflow:visible;padding:24px 20px}
 }
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
@@ -328,6 +359,7 @@ dialog[open]{display:grid;grid-template-columns:380px minmax(0,1fr);animation:po
 [[analytics]]
 </head>
 <body>
+[[body_start]]
 
 <header>
   <div class="wrap">
@@ -347,11 +379,11 @@ dialog[open]{display:grid;grid-template-columns:380px minmax(0,1fr);animation:po
 
 <main id="top">
   <div class="hero wrap" id="hero">
-    <p class="hi">[[hi]]</p>
+    <p class="hi"><span class="wave" aria-hidden="true">👋</span> [[hi]]</p>
     <h1>[[h1]]</h1>
     <p class="lead">[[lead]]</p>
     <div class="actions">
-      <a class="btn primary" href="https://t.me/tm_glfngr" target="_blank" rel="noopener">[[tg]]</a>
+      <a class="btn primary" href="[[msg_url]]" target="_blank" rel="noopener">[[tg]]</a>
       <a class="btn" href="[[resume_url]]" target="_blank" rel="noopener">[[resume]]</a>
     </div>
   </div>
@@ -390,7 +422,7 @@ dialog[open]{display:grid;grid-template-columns:380px minmax(0,1fr);animation:po
   </section>
 </main>
 
-<footer><div class="wrap"><span>[[footer]]</span><span>© 2026</span></div></footer>
+<footer><div class="wrap"><div class="foot"><p>[[footer]]</p><p>[[privacy]]</p></div><span>© 2026</span></div></footer>
 
 <dialog id="modal" aria-labelledby="m-title">
   <button class="close" type="button" aria-label="[[close]]" id="m-close">×</button>
@@ -431,15 +463,24 @@ filters.addEventListener("click", e => {
 const vid = $("m-video"), pic = $("m-img");
 const calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
 function stopVideo(){ vid.pause(); vid.removeAttribute("src"); vid.load(); }
+let mediaToken = 0;
+const preload = i => { const c = CASES[i]; if (c && !c.video) new Image().src = c.img; };
 function showMedia(c){
+  const token = ++mediaToken;                  // защита от быстрого листания: применяем только последний запрос
+  stopVideo();                                 // старое видео и его последний кадр убираем сразу
   if (c.video) {
     pic.hidden = true; pic.removeAttribute("src");
     vid.hidden = false; vid.poster = c.poster; vid.src = c.img; vid.setAttribute("aria-label", c.title);
     vid.controls = calm;                       // при «уменьшить анимацию» автозапуска нет, показываем кнопки
     if (!calm) vid.play().catch(() => {});
   } else {
-    stopVideo(); vid.hidden = true;
-    pic.hidden = false; pic.src = c.img; pic.alt = c.title;
+    vid.hidden = true; vid.removeAttribute("poster");
+    pic.hidden = false; pic.alt = c.title;
+    pic.removeAttribute("src"); pic.classList.add("is-loading");   // предыдущее изображение пропадает сразу
+    const next = new Image();
+    const done = () => { if (token !== mediaToken) return; pic.src = c.img; pic.classList.remove("is-loading"); };
+    next.onload = done; next.onerror = done;
+    next.src = c.img;                          // новое показываем, когда оно загружено
   }
 }
 vid.addEventListener("click", () => { if (!calm) vid.paused ? vid.play() : vid.pause(); });
@@ -449,6 +490,7 @@ function render(i){
   const rows = Object.keys(LABELS).filter(k => c[k]).map(k => [LABELS[k], c[k]]).concat(c.extra || []);
   $("m-body").innerHTML = rows.map(([l, v]) => `<div><dt>${l}</dt><dd>${v}</dd></div>`).join("");
   showMedia(c);
+  if (visible.length > 1) [visible[(current + 1) % visible.length], visible[(current - 1 + visible.length) % visible.length]].forEach(preload);
   modal.querySelector(".m-info").scrollTop = 0;
 }
 function openCase(i){
@@ -515,6 +557,40 @@ VIDEO_EXT = (".mp4", ".webm", ".m4v")
 
 def esc(s): return s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
 
+
+# ---- Типографика: неразрывные пробелы, чтобы не оставались «висячие» предлоги ----
+NBSP = "\u00a0"
+# Короткие слова, после которых пробел становится неразрывным. Нужное слово можно дописать через |
+SHORT_WORDS = ("в|во|к|ко|с|со|у|о|об|и|а|я|но|на|по|за|от|до|из|не|ни|же|ли|бы|для|без|при|про|над|под|или"
+               "|a|an|in|on|to|of|at|by|or|as")
+_re_short = re.compile(r"(?<![\w\-])(" + SHORT_WORDS + r")\s+", re.I)
+_re_dash = re.compile(r"\s+—")                                    # пробел перед тире
+_re_init = re.compile(r"\b([А-ЯЁA-Z])\.\s+(?=[А-ЯЁA-Z])")             # инициалы: А. С. Гольфингер
+_re_unit = re.compile(r"(\d)\s+(?=(?:мм|см|км|кг|м|сек|мин|ГБ|МБ|КБ|₽|%)(?!\w))")  # число + единица
+_re_grp = re.compile(r"(?<=\d{4})\s(?=\d{4})")                    # 1108 0674 5223
+
+def nb(s):
+    """Расставляет неразрывные пробелы в тексте. Теги (<b>) не затрагиваются."""
+    if not s: return s
+    s = _re_short.sub(lambda m: m.group(1) + NBSP, s)
+    s = _re_dash.sub(NBSP + "—", s)
+    s = _re_init.sub(lambda m: m.group(1) + "." + NBSP, s)
+    s = _re_unit.sub(lambda m: m.group(1) + NBSP, s)
+    return _re_grp.sub(NBSP, s)
+
+
+def gtm(l):
+    """Официальный код Google Tag Manager: (для head, для начала body)."""
+    if not GTM_ID or l not in GTM_LANGS:
+        return "", ""
+    head = ("<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});"
+            "var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;"
+            "j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})"
+            f"(window,document,'script','dataLayer','{GTM_ID}');</script>")
+    body = (f'<noscript><iframe src="https://www.googletagmanager.com/ns.html?id={GTM_ID}" '
+            'height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>')
+    return head, body
+
 def seo(t):
     url = SITE + t["path"]
     p = ['<meta property="og:type" content="website">', f'<meta property="og:title" content="{t["title"]}">',
@@ -522,7 +598,9 @@ def seo(t):
          f'<meta property="og:locale" content="{t["locale"]}">']
     if OG_IMAGE:
         p += [f'<meta property="og:image" content="{SITE.rstrip("/") + OG_IMAGE}">', '<meta name="twitter:card" content="summary_large_image">']
-    if FAVICON: p.append(f'<link rel="icon" href="{FAVICON}">')
+    if FAVICON_ICO: p.append(f'<link rel="icon" href="{FAVICON_ICO}" sizes="48x48">')
+    if FAVICON: p.append(f'<link rel="icon" href="{FAVICON}" type="image/svg+xml">')
+    if APPLE_ICON: p.append(f'<link rel="apple-touch-icon" href="{APPLE_ICON}">')
     if YANDEX_VERIFY: p.append(f'<meta name="yandex-verification" content="{YANDEX_VERIFY}">')
     if GOOGLE_VERIFY: p.append(f'<meta name="google-site-verification" content="{GOOGLE_VERIFY}">')
     ld = {"@context": "https://schema.org", "@type": "Person", "name": t["person"], "jobTitle": t["job"], "url": url, "sameAs": ["https://t.me/tm_glfngr"]}
@@ -533,23 +611,32 @@ def build(l):
     global HOME
     t = T[l]; k = 0 if l == "ru" else 1
     HOME = t["home"]
+    t = dict(t)   # копия, в которой расставлены неразрывные пробелы
+    for key in ("hi", "h1", "lead", "contact_h", "contact_p", "footer", "services_h", "portfolio"):
+        t[key] = nb(t[key])
+    t["services"] = [(nb(h), nb(p)) for h, p in t["services"]]
     chips = "".join(f'<button class="chip" type="button" data-key="{c}" aria-pressed="{str(c == DEFAULT_CAT).lower()}">{t["cats"][c]}</button>' for c in CATS)
     chips += f'<button class="chip" type="button" data-key="all" aria-pressed="false">{t["all"]}</button>'
     cards, data = [], []
     for i, c in enumerate(CASES):
-        title, goal, task, role, result = c[l]
+        title, goal, task, role, result = (nb(x) for x in c[l])
         hid = "" if c["c"] == DEFAULT_CAT else " hidden"
         cards.append(f'<button class="card" type="button" data-i="{i}" data-cat="{c["c"]}"{hid}><div class="thumb"><img src="{url(c["t"])}" alt="" loading="lazy" width="800" height="600"></div><h3>{esc(title)}</h3><span>{t["cats"][c["c"]]}</span></button>')
-        data.append(dict(title=title, goal=goal, task=task, role=role, result=result, extra=c.get(l + "_extra", []), img=url(c["i"] or c["t"]), video=(c["i"] or "").lower().endswith(VIDEO_EXT), poster=url(c["t"])))
+        data.append(dict(title=title, goal=goal, task=task, role=role, result=result, extra=[(nb(a), nb(b)) for a, b in c.get(l + "_extra", [])], img=url(c["i"] or c["t"]), video=(c["i"] or "").lower().endswith(VIDEO_EXT), poster=url(c["t"])))
     services = "".join(f"<li><h3>{h}</h3><p>{p}</p></li>" for h, p in t["services"])
     j = lambda o: json.dumps(o, ensure_ascii=False).replace("</", "<\\/")
     rep = dict(lang=t["lang"], title=t["title"], desc=t["desc"], site=SITE, path=t["path"], dark=DARK, navlabel=t["navlabel"],
-               nav0=t["nav"][0], nav1=t["nav"][1], nav2=t["nav"][2], nav3=t["nav"][3], resume_url=RESUME,
+               nav0=t["nav"][0], nav1=t["nav"][1], nav2=t["nav"][2], nav3=t["nav"][3], resume_url=esc(t["resume_url"]), msg_url=esc(t["msg_url"]),
                other=t["other"], other_label=t["other_label"], other_label_lc=t["other_label"].lower(), other_title=t["other_title"], theme=t["theme"],
                hi=t["hi"], h1=t["h1"], lead=t["lead"], tg=t["tg"], resume=t["resume"], portfolio=t["portfolio"], filters_label=t["filters"],
                chips=chips, cards="".join(cards), services_h=t["services_h"], services=services, contact_h=t["contact_h"], contact_p=t["contact_p"],
                copy=t["copy"], copied=t["copied"], fail=t["fail"], footer=t["footer"], close=t["close"], prev=t["prev"], next=t["next"],
                cases_json=j(data), labels_json=j(t["labels"]), seo=seo(t), analytics=METRIKA_CODE)
+    head, body = gtm(l)
+    rep["analytics"] = rep["analytics"] + "\n" + head
+    rep["body_start"] = body
+    label, purl = PRIVACY[l]
+    rep["privacy"] = f'<a href="{esc(purl)}" target="_blank" rel="noopener">{nb(label)}</a>' if purl else nb(label)
     html = TEMPLATE
     for key, val in rep.items(): html = html.replace(f"[[{key}]]", val)
     return html
