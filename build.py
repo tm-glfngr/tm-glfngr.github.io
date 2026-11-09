@@ -14,11 +14,11 @@ OG_IMAGE = "/images/og.jpg"       # картинка для превью ссы�
 FAVICON = "/favicon.svg"          # SVG-иконка в корне сайта (рекомендуют Яндекс и Google); пустая строка = не подключать
 FAVICON_ICO = "/favicon.ico"      # запасная иконка .ico с размером 48x48 (Safari, старые браузеры); пустая строка = не подключать
 APPLE_ICON = "/apple-touch-icon.png"   # PNG 180x180 для iPhone/iPad; пустая строка = не подключать
-GTM_ID = "GTM-N57W9LLN"           # Google Tag Manager; пустая строка = выключено
+GTM_ID = ""                       # Google Tag Manager отключён. Прежний код: GTM-N57W9LLN; пустая строка = выключено
 GTM_LANGS = ("ru", "en")          # на каких версиях подключать GTM. Только на английской: ("en",)
 YANDEX_VERIFY = "c04398cf190402aa"                # код из метатега подтверждения Яндекс Вебмастера (если подтверждаете метатегом)
 GOOGLE_VERIFY = "o49Ym7q_3oqd0ZwT0_iDKNUcBJTMZFgxB0_VBOsp4_c"                # код из метатега Google Search Console
-METRIKA_CODE = """<!-- Yandex.Metrika counter -->
+METRIKA_CODE_SAVED = """<!-- Yandex.Metrika counter -->
 <script type="text/javascript">
     (function(m,e,t,r,i,k,a){
         m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
@@ -31,6 +31,7 @@ METRIKA_CODE = """<!-- Yandex.Metrika counter -->
 </script>
 <noscript><div><img src="https://mc.yandex.ru/watch/114092503" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
 <!-- /Yandex.Metrika counter -->"""                 # сюда целиком вставьте код счётчика Яндекс Метрики (с тегами <script> и <noscript>)
+METRIKA_CODE = ""               # счётчик отключён. Чтобы включить снова: METRIKA_CODE = METRIKA_CODE_SAVED
 
 DARK = "--bg:#0e1614;--surface:#15211e;--ink:#e6efec;--muted:#94a8a2;--line:#263631;--accent-text:#52a595;color-scheme:dark;"
 
@@ -80,8 +81,23 @@ T["en"].update(person="Artem Golfinger", job="Graphic Designer", locale="en_US",
 # Политика конфиденциальности в подвале. Вставьте свои адреса между кавычками.
 # Пока адрес пустой, в подвале показывается обычный текст без ссылки.
 PRIVACY = {
-    "ru": ("Политика конфиденциальности", ""),
-    "en": ("Privacy Policy", ""),
+    "ru": ("Политика конфиденциальности", "https://drive.google.com/file/d/19d-4PYgY0I8k-LFAp5CZac5NbDu22chs/view?usp=sharing"),
+    "en": ("Privacy Policy", "https://drive.google.com/file/d/13LqEZd1-0V4aeaVfQbFk30g9kjJeNb6z/view?usp=sharing"),
+}
+
+# Баннер согласия на cookie. Счётчики (Метрика, GTM) подключаются только после нажатия «Принять».
+# {services} подставляется автоматически, {privacy} превращается в ссылку на политику.
+CONSENT = {
+    "ru": dict(
+        text="Мы используем файлы cookie и сервисы аналитики ({services}), чтобы понимать, как посетители пользуются сайтом. "
+             "Они включаются только с вашего согласия. Подробнее — в {privacy}.",
+        privacy_inline="политике конфиденциальности", yes="Принять", no="Отклонить",
+        settings="Настройки cookie", yandex="Яндекс Метрика"),
+    "en": dict(
+        text="We use cookies and analytics services ({services}) to understand how visitors use the site. "
+             "They are enabled only with your consent. More details in the {privacy}.",
+        privacy_inline="Privacy Policy", yes="Accept", no="Decline",
+        settings="Cookie settings", yandex="Yandex Metrica"),
 }
 
 # ============================ КЕЙСЫ ============================
@@ -234,11 +250,10 @@ TEMPLATE = r"""<!DOCTYPE html>
 <link rel="alternate" hreflang="en" href="[[site]]en/">
 <link rel="alternate" hreflang="x-default" href="[[site]]">
 [[seo]]
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400&family=PT+Sans:wght@700&display=swap" rel="stylesheet">
+[[fonts_head]]
 <script>try{var t=localStorage.getItem("theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
 <style>
+[[fonts_css]]
 :root{
   --bg:#f2f6f5;--surface:#fff;--ink:#12201d;--muted:#55655f;--line:#cfdcd8;
   --accent:#2a7064;--accent-text:#2a7064;--on-accent:#fff;
@@ -284,6 +299,10 @@ nav a[aria-current="true"]{color:var(--accent-text);border-color:var(--accent)}
 .wave{display:inline-block;transform-origin:70% 70%;animation:wave 2.2s ease-in-out .5s infinite}
 @keyframes wave{0%,60%,100%{transform:rotate(0)}10%{transform:rotate(14deg)}20%{transform:rotate(-8deg)}30%{transform:rotate(14deg)}40%{transform:rotate(-4deg)}50%{transform:rotate(10deg)}}
 h1{font-size:clamp(44px,9vw,120px);line-height:1;letter-spacing:-.01em;max-width:12ch;color:var(--accent-text)}
+@media(min-width:900px){
+  .hero{padding-top:clamp(24px,6vh,96px)}
+  h1{font-size:clamp(44px,min(9vw,14vh),120px)}
+}
 .lead{max-width:56ch;margin:32px 0;font-size:clamp(17px,1.6vw,20px);color:var(--muted)}
 .actions{display:flex;flex-wrap:wrap;gap:12px}
 .ticker{overflow:hidden;border-block:1px solid var(--line);padding:16px 0;margin-top:clamp(40px,6vw,72px)}
@@ -308,7 +327,6 @@ h2{margin-bottom:32px;font-size:clamp(32px,4.4vw,56px);line-height:1.1;color:var
 .card img{width:100%;height:100%;object-fit:cover;transition:transform .5s cubic-bezier(.2,.7,.2,1)}
 .card:hover img{transform:scale(1.04)}
 .card h3{font-size:22px;line-height:1.25}
-.card span{color:var(--muted);font-size:14px}
 
 .services{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
 .services li{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:12px 40px;padding:28px 0;border-bottom:1px solid var(--line)}
@@ -329,6 +347,14 @@ footer{padding:40px 0 56px;color:var(--muted);font-size:14px}
 footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px}
 footer p{margin:0}
 footer a{color:inherit;text-underline-offset:3px}
+.linkbtn{padding:0;border:0;background:none;font:inherit;color:inherit;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.consent{position:fixed;left:16px;right:16px;bottom:16px;z-index:30;max-width:760px;display:flex;align-items:center;gap:16px 24px;padding:16px 20px;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);box-shadow:0 12px 40px rgb(0 0 0/.18);animation:pop .28s cubic-bezier(.2,.7,.2,1)}
+.consent[hidden]{display:none}
+.consent p{margin:0;font-size:14px;line-height:1.5;color:var(--muted)}
+.consent a{color:var(--accent-text)}
+.consent-actions{display:flex;gap:8px;flex:none}
+.consent .btn{padding:.6em 1.1em;font-size:14px}
+@media(max-width:640px){.consent{flex-direction:column;align-items:stretch}.consent-actions .btn{flex:1;justify-content:center}}
 
 /* окно кейса: левая колонка 380px + изображение на всю высоту. При ширине окна 1100px и высоте 720px изображение — квадрат 720×720 */
 dialog{width:min(1100px,calc(100% - 32px));height:min(720px,calc(100dvh - 32px));max-height:none;padding:0;border:0;border-radius:var(--radius);background:var(--surface);color:var(--ink);overflow:hidden}
@@ -422,7 +448,7 @@ dialog[open]{display:grid;grid-template-columns:380px minmax(0,1fr);animation:po
   </section>
 </main>
 
-<footer><div class="wrap"><div class="foot"><p>[[footer]]</p><p>[[privacy]]</p></div><span>© 2026</span></div></footer>
+<footer><div class="wrap"><div class="foot"><p>[[footer]]</p><p>[[privacy]][[cookie_link]]</p></div><span>© 2026</span></div></footer>
 
 <dialog id="modal" aria-labelledby="m-title">
   <button class="close" type="button" aria-label="[[close]]" id="m-close">×</button>
@@ -436,6 +462,8 @@ dialog[open]{display:grid;grid-template-columns:380px minmax(0,1fr);animation:po
   </div>
   <div class="m-media"><img id="m-img" alt=""><video id="m-video" muted loop playsinline preload="metadata" hidden></video></div>
 </dialog>
+
+[[consent_html]]
 
 <script>
 const CASES = [[cases_json]];
@@ -529,6 +557,42 @@ $("theme").onclick = () => {
   try { localStorage.setItem("theme", root.dataset.theme); } catch (e) {}
 };
 
+// согласие на cookie: счётчики подключаются только после «Принять»
+const ANALYTICS = [[analytics_json]];
+const consentBox = $("consent");
+const getConsent = () => { try { return localStorage.getItem("consent"); } catch (e) { return null; } };
+const setConsent = v => { try { localStorage.setItem("consent", v); } catch (e) {} };
+let analyticsOn = false;
+function loadAnalytics(){
+  if (analyticsOn || !ANALYTICS) return;
+  analyticsOn = true;
+  const tpl = document.createElement("template");
+  tpl.innerHTML = ANALYTICS;
+  tpl.content.querySelectorAll("script").forEach(old => {
+    const s = document.createElement("script");
+    Array.from(old.attributes).forEach(a => s.setAttribute(a.name, a.value));
+    s.text = old.textContent;
+    document.head.appendChild(s);
+  });
+}
+function clearAnalyticsCookies(){
+  const host = location.hostname, parts = host.split(".");
+  const domains = [host, "." + host];
+  for (let i = 1; i < parts.length - 1; i++) domains.push("." + parts.slice(i).join("."));
+  const names = document.cookie.split(";").map(c => c.split("=")[0].trim()).filter(n => /^(_ym|_ga|_gid|_gat|_gcl)/.test(n));
+  names.forEach(n => {
+    domains.forEach(d => { document.cookie = n + "=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; domain=" + d; });
+    document.cookie = n + "=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
+  });
+}
+if (consentBox) {
+  const saved = getConsent();
+  if (saved === "granted") loadAnalytics(); else if (!saved) consentBox.hidden = false;
+  $("consent-yes").onclick = () => { setConsent("granted"); consentBox.hidden = true; loadAnalytics(); };
+  $("consent-no").onclick = () => { const was = analyticsOn; setConsent("denied"); consentBox.hidden = true; clearAnalyticsCookies(); if (was) location.reload(); };
+  $("cookie-settings").onclick = () => { consentBox.hidden = false; $("consent-yes").focus(); };
+}
+
 // копирование почты
 $("copy").onclick = async e => {
   const b = e.currentTarget;
@@ -579,6 +643,27 @@ def nb(s):
     return _re_grp.sub(NBSP, s)
 
 
+GOOGLE_FONTS = ('<link rel="preconnect" href="https://fonts.googleapis.com">\n'
+                '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n'
+                '<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400&family=PT+Sans:wght@700&display=swap" rel="stylesheet">')
+
+def font_blocks(l):
+    """Шрифты с вашего сервера, если есть fonts/fonts.json (создаётся скриптом get_fonts.py).
+    Пока папки нет, временно подключаются Google Fonts, чтобы сайт не остался без шрифтов."""
+    manifest = pathlib.Path(__file__).parent / "fonts" / "fonts.json"
+    if not manifest.exists():
+        print("Внимание: папка fonts/ не найдена, пока используются Google Fonts. Запустите: python3 get_fonts.py")
+        return GOOGLE_FONTS, ""
+    main = "cyrillic" if l == "ru" else "latin"     # основной набор символов страницы грузится заранее
+    css, pre = [], []
+    for it in json.loads(manifest.read_text(encoding="utf-8")):
+        src = HOME + "fonts/" + it["file"]
+        css.append(f'@font-face{{font-family:"{it["family"]}";font-style:normal;font-weight:{it["weight"]};'
+                   f'font-display:swap;src:url({src}) format("woff2");unicode-range:{it["range"]}}}')
+        if it["subset"] == main:
+            pre.append(f'<link rel="preload" href="{src}" as="font" type="font/woff2" crossorigin>')
+    return "\n".join(pre), "\n".join(css)
+
 def gtm(l):
     """Официальный код Google Tag Manager: (для head, для начала body)."""
     if not GTM_ID or l not in GTM_LANGS:
@@ -621,7 +706,7 @@ def build(l):
     for i, c in enumerate(CASES):
         title, goal, task, role, result = (nb(x) for x in c[l])
         hid = "" if c["c"] == DEFAULT_CAT else " hidden"
-        cards.append(f'<button class="card" type="button" data-i="{i}" data-cat="{c["c"]}"{hid}><div class="thumb"><img src="{url(c["t"])}" alt="" loading="lazy" width="800" height="600"></div><h3>{esc(title)}</h3><span>{t["cats"][c["c"]]}</span></button>')
+        cards.append(f'<button class="card" type="button" data-i="{i}" data-cat="{c["c"]}"{hid}><div class="thumb"><img src="{url(c["t"])}" alt="" loading="lazy" width="800" height="600"></div><h3>{esc(title)}</h3></button>')
         data.append(dict(title=title, goal=goal, task=task, role=role, result=result, extra=[(nb(a), nb(b)) for a, b in c.get(l + "_extra", [])], img=url(c["i"] or c["t"]), video=(c["i"] or "").lower().endswith(VIDEO_EXT), poster=url(c["t"])))
     services = "".join(f"<li><h3>{h}</h3><p>{p}</p></li>" for h, p in t["services"])
     j = lambda o: json.dumps(o, ensure_ascii=False).replace("</", "<\\/")
@@ -632,11 +717,29 @@ def build(l):
                chips=chips, cards="".join(cards), services_h=t["services_h"], services=services, contact_h=t["contact_h"], contact_p=t["contact_p"],
                copy=t["copy"], copied=t["copied"], fail=t["fail"], footer=t["footer"], close=t["close"], prev=t["prev"], next=t["next"],
                cases_json=j(data), labels_json=j(t["labels"]), seo=seo(t), analytics=METRIKA_CODE)
-    head, body = gtm(l)
-    rep["analytics"] = rep["analytics"] + "\n" + head
-    rep["body_start"] = body
+    head, _ = gtm(l)
+    analytics = (METRIKA_CODE + "\n" + head).strip()
+    rep["analytics"] = ""            # счётчики не стоят в <head>: их подключает скрипт страницы после согласия
+    rep["body_start"] = ""
+    rep["analytics_json"] = j(analytics)
+    names = []
+    if METRIKA_CODE.strip(): names.append(CONSENT[l]["yandex"])
+    if head: names.append("Google Analytics")
     label, purl = PRIVACY[l]
     rep["privacy"] = f'<a href="{esc(purl)}" target="_blank" rel="noopener">{nb(label)}</a>' if purl else nb(label)
+    c = CONSENT[l]
+    if names:
+        link = f'<a href="{esc(purl)}" target="_blank" rel="noopener">{nb(c["privacy_inline"])}</a>' if purl else nb(c["privacy_inline"])
+        before, after = c["text"].split("{privacy}")
+        rep["consent_html"] = ('<div class="consent" id="consent" role="dialog" aria-live="polite" hidden>'
+                               f'<p>{nb(before.format(services=", ".join(names)))}{link}{nb(after)}</p>'
+                               f'<div class="consent-actions"><button class="btn primary" type="button" id="consent-yes">{c["yes"]}</button>'
+                               f'<button class="btn" type="button" id="consent-no">{c["no"]}</button></div></div>')
+        rep["cookie_link"] = f' · <button class="linkbtn" type="button" id="cookie-settings">{c["settings"]}</button>'
+    else:
+        rep["consent_html"] = ""
+        rep["cookie_link"] = ""
+    rep["fonts_head"], rep["fonts_css"] = font_blocks(l)
     html = TEMPLATE
     for key, val in rep.items(): html = html.replace(f"[[{key}]]", val)
     return html

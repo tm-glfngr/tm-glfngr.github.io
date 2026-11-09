@@ -22,11 +22,14 @@
 <meta name="yandex-verification" content="c04398cf190402aa">
 <meta name="google-site-verification" content="o49Ym7q_3oqd0ZwT0_iDKNUcBJTMZFgxB0_VBOsp4_c">
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Person", "name": "Artem Golfinger", "jobTitle": "Graphic Designer", "url": "https://tm-g.xyz/en/", "sameAs": ["https://t.me/tm_glfngr"]}</script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400&family=PT+Sans:wght@700&display=swap" rel="stylesheet">
+<link rel="preload" href="../fonts/inter-400-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../fonts/pt-sans-700-latin.woff2" as="font" type="font/woff2" crossorigin>
 <script>try{var t=localStorage.getItem("theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
 <style>
+@font-face{font-family:"Inter";font-style:normal;font-weight:400;font-display:swap;src:url(../fonts/inter-400-cyrillic.woff2) format("woff2");unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116}
+@font-face{font-family:"Inter";font-style:normal;font-weight:400;font-display:swap;src:url(../fonts/inter-400-latin.woff2) format("woff2");unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:"PT Sans";font-style:normal;font-weight:700;font-display:swap;src:url(../fonts/pt-sans-700-cyrillic.woff2) format("woff2");unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116}
+@font-face{font-family:"PT Sans";font-style:normal;font-weight:700;font-display:swap;src:url(../fonts/pt-sans-700-latin.woff2) format("woff2");unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
 :root{
   --bg:#f2f6f5;--surface:#fff;--ink:#12201d;--muted:#55655f;--line:#cfdcd8;
   --accent:#2a7064;--accent-text:#2a7064;--on-accent:#fff;
@@ -72,6 +75,10 @@ nav a[aria-current="true"]{color:var(--accent-text);border-color:var(--accent)}
 .wave{display:inline-block;transform-origin:70% 70%;animation:wave 2.2s ease-in-out .5s infinite}
 @keyframes wave{0%,60%,100%{transform:rotate(0)}10%{transform:rotate(14deg)}20%{transform:rotate(-8deg)}30%{transform:rotate(14deg)}40%{transform:rotate(-4deg)}50%{transform:rotate(10deg)}}
 h1{font-size:clamp(44px,9vw,120px);line-height:1;letter-spacing:-.01em;max-width:12ch;color:var(--accent-text)}
+@media(min-width:900px){
+  .hero{padding-top:clamp(24px,6vh,96px)}
+  h1{font-size:clamp(44px,min(9vw,14vh),120px)}
+}
 .lead{max-width:56ch;margin:32px 0;font-size:clamp(17px,1.6vw,20px);color:var(--muted)}
 .actions{display:flex;flex-wrap:wrap;gap:12px}
 .ticker{overflow:hidden;border-block:1px solid var(--line);padding:16px 0;margin-top:clamp(40px,6vw,72px)}
@@ -96,7 +103,6 @@ h2{margin-bottom:32px;font-size:clamp(32px,4.4vw,56px);line-height:1.1;color:var
 .card img{width:100%;height:100%;object-fit:cover;transition:transform .5s cubic-bezier(.2,.7,.2,1)}
 .card:hover img{transform:scale(1.04)}
 .card h3{font-size:22px;line-height:1.25}
-.card span{color:var(--muted);font-size:14px}
 
 .services{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
 .services li{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:12px 40px;padding:28px 0;border-bottom:1px solid var(--line)}
@@ -117,6 +123,14 @@ footer{padding:40px 0 56px;color:var(--muted);font-size:14px}
 footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px}
 footer p{margin:0}
 footer a{color:inherit;text-underline-offset:3px}
+.linkbtn{padding:0;border:0;background:none;font:inherit;color:inherit;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.consent{position:fixed;left:16px;right:16px;bottom:16px;z-index:30;max-width:760px;display:flex;align-items:center;gap:16px 24px;padding:16px 20px;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);box-shadow:0 12px 40px rgb(0 0 0/.18);animation:pop .28s cubic-bezier(.2,.7,.2,1)}
+.consent[hidden]{display:none}
+.consent p{margin:0;font-size:14px;line-height:1.5;color:var(--muted)}
+.consent a{color:var(--accent-text)}
+.consent-actions{display:flex;gap:8px;flex:none}
+.consent .btn{padding:.6em 1.1em;font-size:14px}
+@media(max-width:640px){.consent{flex-direction:column;align-items:stretch}.consent-actions .btn{flex:1;justify-content:center}}
 
 /* окно кейса: левая колонка 380px + изображение на всю высоту. При ширине окна 1100px и высоте 720px изображение — квадрат 720×720 */
 dialog{width:min(1100px,calc(100% - 32px));height:min(720px,calc(100dvh - 32px));max-height:none;padding:0;border:0;border-radius:var(--radius);background:var(--surface);color:var(--ink);overflow:hidden}
@@ -144,19 +158,6 @@ dialog[open]{display:grid;grid-template-columns:380px minmax(0,1fr);animation:po
 }
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 </style>
-<!-- Yandex.Metrika counter -->
-<script type="text/javascript">
-    (function(m,e,t,r,i,k,a){
-        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-        m[i].l=1*new Date();
-        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
-        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
-    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=114092503', 'ym');
-
-    ym(114092503, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
-</script>
-<noscript><div><img src="https://mc.yandex.ru/watch/114092503" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
-<!-- /Yandex.Metrika counter -->
 
 </head>
 <body>
@@ -194,7 +195,7 @@ dialog[open]{display:grid;grid-template-columns:380px minmax(0,1fr);animation:po
     <div class="wrap">
       <h2>Portfolio</h2>
       <div class="filters" role="group" aria-label="Case filter" id="filters"><button class="chip" type="button" data-key="marketing" aria-pressed="true">Marketing design</button><button class="chip" type="button" data-key="brand" aria-pressed="false">Logos and branding</button><button class="chip" type="button" data-key="print" aria-pressed="false">Print and outdoor</button><button class="chip" type="button" data-key="web" aria-pressed="false">Websites and landing pages</button><button class="chip" type="button" data-key="motion" aria-pressed="false">Motion</button><button class="chip" type="button" data-key="all" aria-pressed="false">All cases</button></div>
-      <div class="grid" id="grid"><button class="card" type="button" data-i="0" data-cat="marketing"><div class="thumb"><img src="../images/01p.webp" alt="" loading="lazy" width="800" height="600"></div><h3>Web banners for Helix</h3><span>Marketing design</span></button><button class="card" type="button" data-i="1" data-cat="marketing"><div class="thumb"><img src="../images/02p.webp" alt="" loading="lazy" width="800" height="600"></div><h3>Other banners and ad creatives</h3><span>Marketing design</span></button><button class="card" type="button" data-i="2" data-cat="marketing"><div class="thumb"><img src="../images/03p.webp" alt="" loading="lazy" width="800" height="600"></div><h3>Helix social media redesign</h3><span>Marketing design</span></button><button class="card" type="button" data-i="3" data-cat="brand" hidden><div class="thumb"><img src="../images/04p.webp" alt="" loading="lazy" width="800" height="600"></div><h3>Smiletogo logo redesign</h3><span>Logos and branding</span></button><button class="card" type="button" data-i="4" data-cat="brand" hidden><div class="thumb"><img src="../images/05p.webp" alt="" loading="lazy" width="800" height="600"></div><h3>Go Kayak branding</h3><span>Logos and branding</span></button><button class="card" type="button" data-i="5" data-cat="brand" hidden><div class="thumb"><img src="../images/06p.webp" alt="" loading="lazy" width="800" height="600"></div><h3>Dog Picnic branding</h3><span>Logos and branding</span></button><button class="card" type="button" data-i="6" data-cat="print" hidden><div class="thumb"><img src="../images/07p.webp" alt="" loading="lazy" width="800" height="600"></div><h3>Outdoor advertising</h3><span>Print and outdoor</span></button><button class="card" type="button" data-i="7" data-cat="print" hidden><div class="thumb"><img src="../images/08p.webp" alt="" loading="lazy" width="800" height="600"></div><h3>Traffic Summit Poster</h3><span>Print and outdoor</span></button><button class="card" type="button" data-i="8" data-cat="print" hidden><div class="thumb"><img src="../images/09p.webp" alt="" loading="lazy" width="800" height="600"></div><h3>Print design</h3><span>Print and outdoor</span></button><button class="card" type="button" data-i="9" data-cat="web" hidden><div class="thumb"><img src="../images/10p.webp" alt="" loading="lazy" width="800" height="600"></div><h3>Helix game special project</h3><span>Websites and landing pages</span></button><button class="card" type="button" data-i="10" data-cat="web" hidden><div class="thumb"><img src="../images/11p.webp" alt="" loading="lazy" width="800" height="600"></div><h3>Service email design</h3><span>Websites and landing pages</span></button><button class="card" type="button" data-i="11" data-cat="web" hidden><div class="thumb"><img src="../images/12p.webp" alt="" loading="lazy" width="800" height="600"></div><h3>Landing page for an interactive museum</h3><span>Websites and landing pages</span></button><button class="card" type="button" data-i="12" data-cat="web" hidden><div class="thumb"><img src="../images/13p.webp" alt="" loading="lazy" width="800" height="600"></div><h3>PRO-service website redesign</h3><span>Websites and landing pages</span></button><button class="card" type="button" data-i="13" data-cat="motion" hidden><div class="thumb"><img src="../images/14p.webp" alt="" loading="lazy" width="800" height="600"></div><h3>Animated advertising banners for Olymptrade</h3><span>Motion</span></button><button class="card" type="button" data-i="14" data-cat="motion" hidden><div class="thumb"><img src="../images/15p.webp" alt="" loading="lazy" width="800" height="600"></div><h3>Banner for virtualcards</h3><span>Motion</span></button></div>
+      <div class="grid" id="grid"><button class="card" type="button" data-i="0" data-cat="marketing"><div class="thumb"><img src="../images/01p.webp" alt="" loading="lazy" width="800" height="600"></div><h3>Web banners for Helix</h3></button><button class="card" type="button" data-i="1" data-cat="marketing"><div class="thumb"><img src="../images/02p.webp" alt="" loading="lazy" width="800" height="600"></div><h3>Other banners and ad creatives</h3></button><button class="card" type="button" data-i="2" data-cat="marketing"><div class="thumb"><img src="../images/03p.webp" alt="" loading="lazy" width="800" height="600"></div><h3>Helix social media redesign</h3></button><button class="card" type="button" data-i="3" data-cat="brand" hidden><div class="thumb"><img src="../images/04p.webp" alt="" loading="lazy" width="800" height="600"></div><h3>Smiletogo logo redesign</h3></button><button class="card" type="button" data-i="4" data-cat="brand" hidden><div class="thumb"><img src="../images/05p.webp" alt="" loading="lazy" width="800" height="600"></div><h3>Go Kayak branding</h3></button><button class="card" type="button" data-i="5" data-cat="brand" hidden><div class="thumb"><img src="../images/06p.webp" alt="" loading="lazy" width="800" height="600"></div><h3>Dog Picnic branding</h3></button><button class="card" type="button" data-i="6" data-cat="print" hidden><div class="thumb"><img src="../images/07p.webp" alt="" loading="lazy" width="800" height="600"></div><h3>Outdoor advertising</h3></button><button class="card" type="button" data-i="7" data-cat="print" hidden><div class="thumb"><img src="../images/08p.webp" alt="" loading="lazy" width="800" height="600"></div><h3>Traffic Summit Poster</h3></button><button class="card" type="button" data-i="8" data-cat="print" hidden><div class="thumb"><img src="../images/09p.webp" alt="" loading="lazy" width="800" height="600"></div><h3>Print design</h3></button><button class="card" type="button" data-i="9" data-cat="web" hidden><div class="thumb"><img src="../images/10p.webp" alt="" loading="lazy" width="800" height="600"></div><h3>Helix game special project</h3></button><button class="card" type="button" data-i="10" data-cat="web" hidden><div class="thumb"><img src="../images/11p.webp" alt="" loading="lazy" width="800" height="600"></div><h3>Service email design</h3></button><button class="card" type="button" data-i="11" data-cat="web" hidden><div class="thumb"><img src="../images/12p.webp" alt="" loading="lazy" width="800" height="600"></div><h3>Landing page for an interactive museum</h3></button><button class="card" type="button" data-i="12" data-cat="web" hidden><div class="thumb"><img src="../images/13p.webp" alt="" loading="lazy" width="800" height="600"></div><h3>PRO-service website redesign</h3></button><button class="card" type="button" data-i="13" data-cat="motion" hidden><div class="thumb"><img src="../images/14p.webp" alt="" loading="lazy" width="800" height="600"></div><h3>Animated advertising banners for Olymptrade</h3></button><button class="card" type="button" data-i="14" data-cat="motion" hidden><div class="thumb"><img src="../images/15p.webp" alt="" loading="lazy" width="800" height="600"></div><h3>Banner for virtualcards</h3></button></div>
     </div>
   </section>
 
@@ -223,7 +224,7 @@ dialog[open]{display:grid;grid-template-columns:380px minmax(0,1fr);animation:po
   </section>
 </main>
 
-<footer><div class="wrap"><div class="foot"><p>Artem Golfinger</p><p>Privacy Policy</p></div><span>© 2026</span></div></footer>
+<footer><div class="wrap"><div class="foot"><p>Artem Golfinger</p><p><a href="https://drive.google.com/file/d/13LqEZd1-0V4aeaVfQbFk30g9kjJeNb6z/view?usp=sharing" target="_blank" rel="noopener">Privacy Policy</a></p></div><span>© 2026</span></div></footer>
 
 <dialog id="modal" aria-labelledby="m-title">
   <button class="close" type="button" aria-label="Close" id="m-close">×</button>
@@ -237,6 +238,8 @@ dialog[open]{display:grid;grid-template-columns:380px minmax(0,1fr);animation:po
   </div>
   <div class="m-media"><img id="m-img" alt=""><video id="m-video" muted loop playsinline preload="metadata" hidden></video></div>
 </dialog>
+
+
 
 <script>
 const CASES = [{"title": "Web banners for Helix", "goal": "Design ad creatives for Helix marketing activities, focusing not only on visual appeal but on campaign performance.", "task": "Develop visual concepts for campaigns and promotions and adapt them to different channels and formats: Yandex Advertising Network, geo services, social media and other digital placements.", "role": "Developed creatives from concept to final layouts, driven by marketing goals. Made resizes and adaptations for different formats and ad platforms.", "result": "The creatives performed strongly. In some campaigns CTR grew from 0.1% <b>to 0.5%<\/b> (Yandex Advertising Network). One promotion delivered +300% sales against the plan.", "extra": [], "img": "../images/01.webp", "video": false, "poster": "../images/01p.webp"}, {"title": "Other banners and ad creatives", "goal": "Develop effective ad creatives for businesses in different niches and for different marketing goals.", "task": "Create banners and advertising materials for various formats and channels, taking into account the target audience, campaign goals and platform requirements.", "role": "Led projects with clients end to end: from discussing the task and developing several visual concepts to final layouts and adaptations. Advised on visual presentation and proposed solutions to improve conversion.", "result": "Created a large number of creatives for different niches and formats. Built a systematic approach where visual appeal is combined with a clear offer and marketing effectiveness.", "extra": [], "img": "../images/02.webp", "video": false, "poster": "../images/02p.webp"}, {"title": "Helix social media redesign", "goal": "Refresh the visual style of Helix social media: make it more modern and noticeable among competitors while keeping brand recognition and the trust of the existing audience.", "task": "Develop a new visual direction that follows current design trends, attracts a new audience and stays clear and comfortable for the current one.", "role": "Worked in a cross-functional team with another designer and SMM specialists. Together with my colleague I developed several concepts, defended them in front of the team and took part in implementing the chosen direction.", "result": "Created an updated visual system for social media that kept the brand recognizable and made it more modern.", "extra": [], "img": "../images/03.webp", "video": false, "poster": "../images/03p.webp"}, {"title": "Smiletogo logo redesign", "goal": "Refresh the visual image of the Smiletogo service and increase brand recognition.", "task": "Redesign the logo and, based on it, create the foundation of the brand identity: colors, typography, pattern and social media templates.", "role": "Worked with the client end to end: developed several logo concepts and finalized the chosen one. Created the core brand identity elements and social media templates.", "result": "In 4 months after launch: website conversion grew by 12%, followers by 18%, and social media engagement by 15%.", "extra": [], "img": "../images/04.webp", "video": false, "poster": "../images/04p.webp"}, {"title": "Go Kayak branding", "goal": "Create a recognizable brand identity for a kayak rental service that stands out from competitors and conveys outdoor leisure, reliability and professional support.", "task": "Analyze the audience and competitors, define the visual direction and develop an identity that combines water and nature themes with a modern, professional brand image.", "role": "Analyzed the audience and competitors, developed the concept and brand identity: logo, color palette, typography and pattern. Designed the system of visual elements and rules for using them.", "result": "A cohesive identity that links nature and water with the image of a reliable service. All brand elements are organized in a single guidebook.", "extra": [], "img": "../images/05.webp", "video": false, "poster": "../images/05p.webp"}, {"title": "Dog Picnic branding", "goal": "The client needed a visual identity for the project. The design had to use colors associated with nature, such as grass and earth tones, while creating a friendly and welcoming feel through elements like dogs and playful visuals. A moodboard was provided as a reference.", "task": "I developed a logo, selected the brand color palette, and chose a pair of complementary fonts. I also provided guidelines for using the visual identity and created social media templates.", "role": null, "result": null, "extra": [], "img": "../images/06.webp", "video": false, "poster": "../images/06p.webp"}, {"title": "Outdoor advertising", "goal": "Design layouts for outdoor placements that stay eye-catching and easy to read in real urban conditions.", "task": "Develop designs for large-format 3×6 m billboards and digital screens with 5–15 second animations, following the technical requirements of each format.", "role": "Handled the full layout design: accounted for technical requirements, viewing distance, legibility of details, lighting, weather and placement specifics. For digital screens I also developed short animations and adaptations.", "result": "The layouts were placed on outdoor structures and digital screens in busy locations in St. Petersburg, Moscow, Novosibirsk, Makhachkala and other large cities.", "extra": [], "img": "../images/07.webp", "video": false, "poster": "../images/07p.webp"}, {"title": "Traffic Summit Poster", "goal": "", "task": "", "role": "", "result": "", "extra": [], "img": "../images/08.webp", "video": false, "poster": "../images/08p.webp"}, {"title": "Print design", "goal": null, "task": null, "role": null, "result": null, "extra": [], "img": "../images/09.webp", "video": false, "poster": "../images/09p.webp"}, {"title": "Helix game special project", "goal": "Create an interactive special project that introduces Helix customers to the company's products and services in an engaging way.", "task": "Develop a landing page concept with gamification elements that combines entertainment with native promotion of products, offers and discounts.", "role": "Proposed the concept and refined it together with a team of designers and marketers. Responsible for the visual part, game mechanics, interaction scenarios and user experience.", "result": "An interactive quest that introduces Helix products and services with humor, draws users into the game and offers promotions and discounts natively.", "extra": [], "img": "../images/10.webp", "video": false, "poster": "../images/10p.webp"}, {"title": "Service email design", "goal": "Unify service emails and make communication clearer, more modern and more recognizable for users.", "task": "Bring order to transactional email layouts: registration, password reset, loyalty points, account actions, loyalty program and other service messages.", "role": "Redesigned and unified the visual system of the emails, improved structure and readability. Adapted the layouts to different devices and display formats.", "result": "A single system of service communications that is easier for users, matches the brand style better and is recognizable across all email types.", "extra": [], "img": "../images/11.webp", "video": false, "poster": "../images/11p.webp"}, {"title": "Landing page for an interactive museum", "goal": "Create a modern, atmospheric landing page for the launch of Readles, an interactive fairy-tale museum in Dubai.", "task": "Develop a visual concept that blends a fairy-tale theme with the atmosphere of future technology and AI, while clearly presenting the museum's interactive format.", "role": "Designed the landing page: developed the concept and visual composition, chose solutions to convey a high-tech atmosphere, designed interactive blocks and prepared responsive versions.", "result": "A cohesive landing page that combines fairy tales, future technology and AI. The visual concept conveys the museum's innovative character.", "extra": [], "img": "../images/12.webp", "video": false, "poster": "../images/12p.webp"}, {"title": "PRO-service website redesign", "goal": "Make a business coach's website more effective, improve the user journey and increase conversion.", "task": "Audit the existing Tilda website, identify weak points in structure, funnel, conversion and SEO, and find ways to improve the user experience.", "role": "Audited the site and proposed improvements to structure and visual presentation. Implemented the redesign on Tilda, including forms, payment, delivery, CRM and responsive versions.", "result": "Updated the structure and visual presentation, fixed the identified issues and improved the user journey, which increased the website's conversion.", "extra": [], "img": "../images/13.webp", "video": false, "poster": "../images/13p.webp"}, {"title": "Animated advertising banners for Olymptrade", "goal": "Create modern animated advertising banners to promote a fintech product and attract potential users.", "task": "Design minimalist horizontal banners highlighting the product's key benefits. Develop smooth animations and CTA elements, using modern motion effects without making the visuals feel cluttered.", "role": "", "result": "Created clean, minimalist animated banners in a modern fintech style, with a duration of 5–10 seconds.", "extra": [["Tools", "After Effects"]], "img": "../videos/motion-1.mp4", "video": true, "poster": "../images/14p.webp"}, {"title": "Banner for virtualcards", "goal": "Improve the performance of virtual card advertising by creating a bold, eye-catching animated banner that stands out from competitors and attracts the target audience.", "task": "Analyze competitors' advertising creatives, identify effective visual techniques, and develop a unique banner concept. Create a static design and bring it to life with simple yet engaging animation.", "role": "", "result": "Created an animated advertising banner focused on visual impact, clear messaging, and attracting the attention of potential customers.", "extra": [["Tools", "After Effects, Blender"]], "img": "../videos/motion-2.mp4", "video": true, "poster": "../images/15p.webp"}];
@@ -329,6 +332,42 @@ $("theme").onclick = () => {
   root.dataset.theme = dark ? "light" : "dark";
   try { localStorage.setItem("theme", root.dataset.theme); } catch (e) {}
 };
+
+// согласие на cookie: счётчики подключаются только после «Принять»
+const ANALYTICS = "";
+const consentBox = $("consent");
+const getConsent = () => { try { return localStorage.getItem("consent"); } catch (e) { return null; } };
+const setConsent = v => { try { localStorage.setItem("consent", v); } catch (e) {} };
+let analyticsOn = false;
+function loadAnalytics(){
+  if (analyticsOn || !ANALYTICS) return;
+  analyticsOn = true;
+  const tpl = document.createElement("template");
+  tpl.innerHTML = ANALYTICS;
+  tpl.content.querySelectorAll("script").forEach(old => {
+    const s = document.createElement("script");
+    Array.from(old.attributes).forEach(a => s.setAttribute(a.name, a.value));
+    s.text = old.textContent;
+    document.head.appendChild(s);
+  });
+}
+function clearAnalyticsCookies(){
+  const host = location.hostname, parts = host.split(".");
+  const domains = [host, "." + host];
+  for (let i = 1; i < parts.length - 1; i++) domains.push("." + parts.slice(i).join("."));
+  const names = document.cookie.split(";").map(c => c.split("=")[0].trim()).filter(n => /^(_ym|_ga|_gid|_gat|_gcl)/.test(n));
+  names.forEach(n => {
+    domains.forEach(d => { document.cookie = n + "=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; domain=" + d; });
+    document.cookie = n + "=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
+  });
+}
+if (consentBox) {
+  const saved = getConsent();
+  if (saved === "granted") loadAnalytics(); else if (!saved) consentBox.hidden = false;
+  $("consent-yes").onclick = () => { setConsent("granted"); consentBox.hidden = true; loadAnalytics(); };
+  $("consent-no").onclick = () => { const was = analyticsOn; setConsent("denied"); consentBox.hidden = true; clearAnalyticsCookies(); if (was) location.reload(); };
+  $("cookie-settings").onclick = () => { consentBox.hidden = false; $("consent-yes").focus(); };
+}
 
 // копирование почты
 $("copy").onclick = async e => {

@@ -22,11 +22,14 @@
 <meta name="yandex-verification" content="c04398cf190402aa">
 <meta name="google-site-verification" content="o49Ym7q_3oqd0ZwT0_iDKNUcBJTMZFgxB0_VBOsp4_c">
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Person", "name": "Артём Гольфингер", "jobTitle": "Графический дизайнер", "url": "https://tm-g.xyz/", "sameAs": ["https://t.me/tm_glfngr"]}</script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400&family=PT+Sans:wght@700&display=swap" rel="stylesheet">
+<link rel="preload" href="./fonts/inter-400-cyrillic.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="./fonts/pt-sans-700-cyrillic.woff2" as="font" type="font/woff2" crossorigin>
 <script>try{var t=localStorage.getItem("theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
 <style>
+@font-face{font-family:"Inter";font-style:normal;font-weight:400;font-display:swap;src:url(./fonts/inter-400-cyrillic.woff2) format("woff2");unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116}
+@font-face{font-family:"Inter";font-style:normal;font-weight:400;font-display:swap;src:url(./fonts/inter-400-latin.woff2) format("woff2");unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:"PT Sans";font-style:normal;font-weight:700;font-display:swap;src:url(./fonts/pt-sans-700-cyrillic.woff2) format("woff2");unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116}
+@font-face{font-family:"PT Sans";font-style:normal;font-weight:700;font-display:swap;src:url(./fonts/pt-sans-700-latin.woff2) format("woff2");unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
 :root{
   --bg:#f2f6f5;--surface:#fff;--ink:#12201d;--muted:#55655f;--line:#cfdcd8;
   --accent:#2a7064;--accent-text:#2a7064;--on-accent:#fff;
@@ -72,6 +75,10 @@ nav a[aria-current="true"]{color:var(--accent-text);border-color:var(--accent)}
 .wave{display:inline-block;transform-origin:70% 70%;animation:wave 2.2s ease-in-out .5s infinite}
 @keyframes wave{0%,60%,100%{transform:rotate(0)}10%{transform:rotate(14deg)}20%{transform:rotate(-8deg)}30%{transform:rotate(14deg)}40%{transform:rotate(-4deg)}50%{transform:rotate(10deg)}}
 h1{font-size:clamp(44px,9vw,120px);line-height:1;letter-spacing:-.01em;max-width:12ch;color:var(--accent-text)}
+@media(min-width:900px){
+  .hero{padding-top:clamp(24px,6vh,96px)}
+  h1{font-size:clamp(44px,min(9vw,14vh),120px)}
+}
 .lead{max-width:56ch;margin:32px 0;font-size:clamp(17px,1.6vw,20px);color:var(--muted)}
 .actions{display:flex;flex-wrap:wrap;gap:12px}
 .ticker{overflow:hidden;border-block:1px solid var(--line);padding:16px 0;margin-top:clamp(40px,6vw,72px)}
@@ -96,7 +103,6 @@ h2{margin-bottom:32px;font-size:clamp(32px,4.4vw,56px);line-height:1.1;color:var
 .card img{width:100%;height:100%;object-fit:cover;transition:transform .5s cubic-bezier(.2,.7,.2,1)}
 .card:hover img{transform:scale(1.04)}
 .card h3{font-size:22px;line-height:1.25}
-.card span{color:var(--muted);font-size:14px}
 
 .services{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
 .services li{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:12px 40px;padding:28px 0;border-bottom:1px solid var(--line)}
@@ -117,6 +123,14 @@ footer{padding:40px 0 56px;color:var(--muted);font-size:14px}
 footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px}
 footer p{margin:0}
 footer a{color:inherit;text-underline-offset:3px}
+.linkbtn{padding:0;border:0;background:none;font:inherit;color:inherit;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.consent{position:fixed;left:16px;right:16px;bottom:16px;z-index:30;max-width:760px;display:flex;align-items:center;gap:16px 24px;padding:16px 20px;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);box-shadow:0 12px 40px rgb(0 0 0/.18);animation:pop .28s cubic-bezier(.2,.7,.2,1)}
+.consent[hidden]{display:none}
+.consent p{margin:0;font-size:14px;line-height:1.5;color:var(--muted)}
+.consent a{color:var(--accent-text)}
+.consent-actions{display:flex;gap:8px;flex:none}
+.consent .btn{padding:.6em 1.1em;font-size:14px}
+@media(max-width:640px){.consent{flex-direction:column;align-items:stretch}.consent-actions .btn{flex:1;justify-content:center}}
 
 /* окно кейса: левая колонка 380px + изображение на всю высоту. При ширине окна 1100px и высоте 720px изображение — квадрат 720×720 */
 dialog{width:min(1100px,calc(100% - 32px));height:min(720px,calc(100dvh - 32px));max-height:none;padding:0;border:0;border-radius:var(--radius);background:var(--surface);color:var(--ink);overflow:hidden}
@@ -144,19 +158,6 @@ dialog[open]{display:grid;grid-template-columns:380px minmax(0,1fr);animation:po
 }
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 </style>
-<!-- Yandex.Metrika counter -->
-<script type="text/javascript">
-    (function(m,e,t,r,i,k,a){
-        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-        m[i].l=1*new Date();
-        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
-        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
-    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=114092503', 'ym');
-
-    ym(114092503, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
-</script>
-<noscript><div><img src="https://mc.yandex.ru/watch/114092503" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
-<!-- /Yandex.Metrika counter -->
 
 </head>
 <body>
@@ -194,7 +195,7 @@ dialog[open]{display:grid;grid-template-columns:380px minmax(0,1fr);animation:po
     <div class="wrap">
       <h2>Портфолио</h2>
       <div class="filters" role="group" aria-label="Фильтр кейсов" id="filters"><button class="chip" type="button" data-key="marketing" aria-pressed="true">Маркетинговый дизайн</button><button class="chip" type="button" data-key="brand" aria-pressed="false">Логотипы и брендинг</button><button class="chip" type="button" data-key="print" aria-pressed="false">Полиграфия и наружка</button><button class="chip" type="button" data-key="web" aria-pressed="false">Сайты и лендинги</button><button class="chip" type="button" data-key="motion" aria-pressed="false">Моушн</button><button class="chip" type="button" data-key="all" aria-pressed="false">Все кейсы</button></div>
-      <div class="grid" id="grid"><button class="card" type="button" data-i="0" data-cat="marketing"><div class="thumb"><img src="./images/01p.webp" alt="" loading="lazy" width="800" height="600"></div><h3>Веб-баннеры для Helix</h3><span>Маркетинговый дизайн</span></button><button class="card" type="button" data-i="1" data-cat="marketing"><div class="thumb"><img src="./images/02p.webp" alt="" loading="lazy" width="800" height="600"></div><h3>Другие баннеры и рекламные креативы</h3><span>Маркетинговый дизайн</span></button><button class="card" type="button" data-i="2" data-cat="marketing"><div class="thumb"><img src="./images/03p.webp" alt="" loading="lazy" width="800" height="600"></div><h3>Редизайн СММ Helix</h3><span>Маркетинговый дизайн</span></button><button class="card" type="button" data-i="3" data-cat="brand" hidden><div class="thumb"><img src="./images/04p.webp" alt="" loading="lazy" width="800" height="600"></div><h3>Редизайн логотипа Smiletogo</h3><span>Логотипы и брендинг</span></button><button class="card" type="button" data-i="4" data-cat="brand" hidden><div class="thumb"><img src="./images/05p.webp" alt="" loading="lazy" width="800" height="600"></div><h3>Брендинг Go Каяк</h3><span>Логотипы и брендинг</span></button><button class="card" type="button" data-i="5" data-cat="brand" hidden><div class="thumb"><img src="./images/06p.webp" alt="" loading="lazy" width="800" height="600"></div><h3>Брендинг Дог Пикник</h3><span>Логотипы и брендинг</span></button><button class="card" type="button" data-i="6" data-cat="print" hidden><div class="thumb"><img src="./images/07p.webp" alt="" loading="lazy" width="800" height="600"></div><h3>Наружная реклама</h3><span>Полиграфия и наружка</span></button><button class="card" type="button" data-i="7" data-cat="print" hidden><div class="thumb"><img src="./images/08p.webp" alt="" loading="lazy" width="800" height="600"></div><h3>Постер к саммиту Traffic Summit</h3><span>Полиграфия и наружка</span></button><button class="card" type="button" data-i="8" data-cat="print" hidden><div class="thumb"><img src="./images/09p.webp" alt="" loading="lazy" width="800" height="600"></div><h3>Полиграфия</h3><span>Полиграфия и наружка</span></button><button class="card" type="button" data-i="9" data-cat="web" hidden><div class="thumb"><img src="./images/10p.webp" alt="" loading="lazy" width="800" height="600"></div><h3>Спецпроект-игра Helix</h3><span>Сайты и лендинги</span></button><button class="card" type="button" data-i="10" data-cat="web" hidden><div class="thumb"><img src="./images/11p.webp" alt="" loading="lazy" width="800" height="600"></div><h3>Дизайн сервисных рассылок</h3><span>Сайты и лендинги</span></button><button class="card" type="button" data-i="11" data-cat="web" hidden><div class="thumb"><img src="./images/12p.webp" alt="" loading="lazy" width="800" height="600"></div><h3>Лендинг для интерактивного музея</h3><span>Сайты и лендинги</span></button><button class="card" type="button" data-i="12" data-cat="web" hidden><div class="thumb"><img src="./images/13p.webp" alt="" loading="lazy" width="800" height="600"></div><h3>Редизайн сайта PRO-сервис</h3><span>Сайты и лендинги</span></button><button class="card" type="button" data-i="13" data-cat="motion" hidden><div class="thumb"><img src="./images/14p.webp" alt="" loading="lazy" width="800" height="600"></div><h3>Анимированные баннеры для Olymptrade</h3><span>Моушн</span></button><button class="card" type="button" data-i="14" data-cat="motion" hidden><div class="thumb"><img src="./images/15p.webp" alt="" loading="lazy" width="800" height="600"></div><h3>Баннер для virtualcards</h3><span>Моушн</span></button></div>
+      <div class="grid" id="grid"><button class="card" type="button" data-i="0" data-cat="marketing"><div class="thumb"><img src="./images/01p.webp" alt="" loading="lazy" width="800" height="600"></div><h3>Веб-баннеры для Helix</h3></button><button class="card" type="button" data-i="1" data-cat="marketing"><div class="thumb"><img src="./images/02p.webp" alt="" loading="lazy" width="800" height="600"></div><h3>Другие баннеры и рекламные креативы</h3></button><button class="card" type="button" data-i="2" data-cat="marketing"><div class="thumb"><img src="./images/03p.webp" alt="" loading="lazy" width="800" height="600"></div><h3>Редизайн СММ Helix</h3></button><button class="card" type="button" data-i="3" data-cat="brand" hidden><div class="thumb"><img src="./images/04p.webp" alt="" loading="lazy" width="800" height="600"></div><h3>Редизайн логотипа Smiletogo</h3></button><button class="card" type="button" data-i="4" data-cat="brand" hidden><div class="thumb"><img src="./images/05p.webp" alt="" loading="lazy" width="800" height="600"></div><h3>Брендинг Go Каяк</h3></button><button class="card" type="button" data-i="5" data-cat="brand" hidden><div class="thumb"><img src="./images/06p.webp" alt="" loading="lazy" width="800" height="600"></div><h3>Брендинг Дог Пикник</h3></button><button class="card" type="button" data-i="6" data-cat="print" hidden><div class="thumb"><img src="./images/07p.webp" alt="" loading="lazy" width="800" height="600"></div><h3>Наружная реклама</h3></button><button class="card" type="button" data-i="7" data-cat="print" hidden><div class="thumb"><img src="./images/08p.webp" alt="" loading="lazy" width="800" height="600"></div><h3>Постер к саммиту Traffic Summit</h3></button><button class="card" type="button" data-i="8" data-cat="print" hidden><div class="thumb"><img src="./images/09p.webp" alt="" loading="lazy" width="800" height="600"></div><h3>Полиграфия</h3></button><button class="card" type="button" data-i="9" data-cat="web" hidden><div class="thumb"><img src="./images/10p.webp" alt="" loading="lazy" width="800" height="600"></div><h3>Спецпроект-игра Helix</h3></button><button class="card" type="button" data-i="10" data-cat="web" hidden><div class="thumb"><img src="./images/11p.webp" alt="" loading="lazy" width="800" height="600"></div><h3>Дизайн сервисных рассылок</h3></button><button class="card" type="button" data-i="11" data-cat="web" hidden><div class="thumb"><img src="./images/12p.webp" alt="" loading="lazy" width="800" height="600"></div><h3>Лендинг для интерактивного музея</h3></button><button class="card" type="button" data-i="12" data-cat="web" hidden><div class="thumb"><img src="./images/13p.webp" alt="" loading="lazy" width="800" height="600"></div><h3>Редизайн сайта PRO-сервис</h3></button><button class="card" type="button" data-i="13" data-cat="motion" hidden><div class="thumb"><img src="./images/14p.webp" alt="" loading="lazy" width="800" height="600"></div><h3>Анимированные баннеры для Olymptrade</h3></button><button class="card" type="button" data-i="14" data-cat="motion" hidden><div class="thumb"><img src="./images/15p.webp" alt="" loading="lazy" width="800" height="600"></div><h3>Баннер для virtualcards</h3></button></div>
     </div>
   </section>
 
@@ -223,7 +224,7 @@ dialog[open]{display:grid;grid-template-columns:380px minmax(0,1fr);animation:po
   </section>
 </main>
 
-<footer><div class="wrap"><div class="foot"><p>ИП Гольфингер А. С. · ИНН 1108 0674 5223</p><p>Политика конфиденциальности</p></div><span>© 2026</span></div></footer>
+<footer><div class="wrap"><div class="foot"><p>ИП Гольфингер А. С. · ИНН 1108 0674 5223</p><p><a href="https://drive.google.com/file/d/19d-4PYgY0I8k-LFAp5CZac5NbDu22chs/view?usp=sharing" target="_blank" rel="noopener">Политика конфиденциальности</a></p></div><span>© 2026</span></div></footer>
 
 <dialog id="modal" aria-labelledby="m-title">
   <button class="close" type="button" aria-label="Закрыть" id="m-close">×</button>
@@ -237,6 +238,8 @@ dialog[open]{display:grid;grid-template-columns:380px minmax(0,1fr);animation:po
   </div>
   <div class="m-media"><img id="m-img" alt=""><video id="m-video" muted loop playsinline preload="metadata" hidden></video></div>
 </dialog>
+
+
 
 <script>
 const CASES = [{"title": "Веб-баннеры для Helix", "goal": "Дизайн рекламных креативов для маркетинговых активностей Helix: важна была не только визуальная часть, но и эффективность с точки зрения конверсии.", "task": "Разрабатывать визуальные концепции для кампаний и акций и адаптировать их под разные каналы и форматы: РСЯ, геосервисы, соцсети и другие digital-размещения.", "role": "Разрабатывал креативы от концепции до готовых макетов с учётом маркетинговых задач. Делал ресайзы и адаптации под форматы и площадки (РСЯ, ГЕО, СММ и др.).", "result": "Креативы показывали высокую эффективность. В отдельных кампаниях CTR вырос с 0,1% <b>до 0,5%<\/b> (РСЯ). Финансовый результат одной из акций — +300% продаж от плана.", "extra": [], "img": "./images/01.webp", "video": false, "poster": "./images/01p.webp"}, {"title": "Другие баннеры и рекламные креативы", "goal": "Разработать эффективные рекламные креативы для бизнеса в разных нишах и под разные маркетинговые задачи.", "task": "Создать баннеры и рекламные материалы для разных форматов и каналов с учётом целевой аудитории, задач кампании и требований площадки.", "role": "Вёл проекты с заказчиками End-to-End. Консультировал по визуальной подаче и предлагал решения для повышения конверсии.", "result": "Создано большое количество креативов для разных ниш и форматов. Выработан системный подход: визуальная привлекательность сочетается с понятной подачей предложения и маркетинговой эффективностью.", "extra": [], "img": "./images/02.webp", "video": false, "poster": "./images/02p.webp"}, {"title": "Редизайн СММ Helix", "goal": "Обновить визуальный стиль соцсетей Helix: сделать его современнее и заметнее на фоне конкурентов, сохранив узнаваемость бренда и доверие аудитории.", "task": "Разработать новое визуальное направление, которое отвечает актуальным трендам, привлекает новую аудиторию и остаётся понятным для текущей.", "role": "Работал в кроссфункциональной команде с другим дизайнером и SMM-специалистами. Вместе с коллегой разработал несколько концепций, защищал их перед командой и после выбора направления участвовал в реализации.", "result": "Создана обновлённая визуальная система соцсетей, которая сохранила узнаваемость бренда и стала современнее.", "extra": [], "img": "./images/03.webp", "video": false, "poster": "./images/03p.webp"}, {"title": "Редизайн логотипа Smiletogo", "goal": "Обновить визуальный образ сервиса Smiletogo и повысить узнаваемость бренда.", "task": "Сделать редизайн логотипа и на его основе создать базу фирменного стиля: цвета, типографику, паттерн и шаблоны для соцсетей.", "role": "Работал с заказчиком End-to-End: разработал несколько концепций логотипа и финализировал выбранную. Создал базовые элементы фирменного стиля и шаблоны для соцсетей.", "result": "За 4 месяца после внедрения: конверсия сайта выросла на 12%, количество подписчиков — на 18%, вовлечённость в соцсетях — на 15%.", "extra": [], "img": "./images/04.webp", "video": false, "poster": "./images/04p.webp"}, {"title": "Брендинг Go Каяк", "goal": "Создать узнаваемый фирменный стиль для сервиса аренды каяков: выделить бренд среди конкурентов и передать ощущение отдыха на природе, надёжности и профессионализма.", "task": "Проанализировать аудиторию и конкурентов, определить визуальное направление и разработать айдентику, которая сочетает тематику воды и природы с современным образом.", "role": "Провёл анализ аудитории и конкурентов, разработал концепцию и фирменный стиль: логотип, палитру, типографику и паттерн. Продумал систему визуальных элементов и правила их использования.", "result": "Цельная айдентика, объединяющая природу и воду с образом надёжного сервиса. Все элементы систематизированы в едином гайдбуке.", "extra": [], "img": "./images/05.webp", "video": false, "poster": "./images/05p.webp"}, {"title": "Брендинг Дог Пикник", "goal": "Заказчику необходима айдентика для проекта. В дизайне нужно было использовать цвета, которые ассоциируются с природой (трава, земля), а также сделать его дружелюбным (пёсики, всё такое). Был предоставлен мудборд.", "task": "Я разработал логотип, подобрал цветовую палитру бренда и выбрал пару гармонирующих друг с другом шрифтов. Кроме того, я подготовил руководство по использованию визуального стиля и создал шаблоны для социальных сетей.", "role": null, "result": null, "extra": [], "img": "./images/06.webp", "video": false, "poster": "./images/06p.webp"}, {"title": "Наружная реклама", "goal": "Дизайн макетов для наружных размещений, которые остаются заметными и легко считываются в условиях города.", "task": "Разработать дизайн для крупноформатных баннеров 3×6 м и digital-экранов с анимацией 5–15 секунд с учётом технических требований каждого формата.", "role": "Полностью выполнял дизайн макетов: учитывал техтребования, дистанцию просмотра, читаемость деталей, освещённость, погоду и особенности размещения. Для digital-экранов проработал короткие анимации и адаптации.", "result": "Макеты размещались на наружных конструкциях и digital-экранах в людных местах Санкт-Петербурга, Москвы, Новосибирска, Махачкалы и других крупных городов.", "extra": [], "img": "./images/07.webp", "video": false, "poster": "./images/07p.webp"}, {"title": "Постер к саммиту Traffic Summit", "goal": "", "task": "", "role": "", "result": "", "extra": [], "img": "./images/08.webp", "video": false, "poster": "./images/08p.webp"}, {"title": "Полиграфия", "goal": null, "task": null, "role": null, "result": null, "extra": [], "img": "./images/09.webp", "video": false, "poster": "./images/09p.webp"}, {"title": "Спецпроект-игра Helix", "goal": "Создать интерактивный спецпроект, который в вовлекающей форме знакомит клиентов Helix с продуктами и услугами компании.", "task": "Разработать концепцию лендинга с элементами геймификации, сочетающую развлечение и нативное продвижение продуктов, акций и спецпредложений.", "role": "Предложил концепцию и вместе с командой дизайнеров и маркетологов доработал её. Отвечал за визуальную часть, игровые механики, сценарии взаимодействия и UX.", "result": "Интерактивный квест, который с юмором знакомит с продуктами и услугами Helix, вовлекает в игру и нативно предлагает акции и скидки.", "extra": [], "img": "./images/10.webp", "video": false, "poster": "./images/10p.webp"}, {"title": "Дизайн сервисных рассылок", "goal": "Унифицировать сервисные рассылки и сделать коммуникацию понятнее, современнее и узнаваемее.", "task": "Привести в порядок макеты транзакционных писем: регистрация, смена пароля, накопление баллов, действия в личном кабинете, программа лояльности и другие.", "role": "Провёл редизайн и унифицировал визуальную систему рассылок, улучшил структуру и читаемость. Адаптировал макеты под разные устройства и форматы.", "result": "Единая система сервисных коммуникаций: удобнее для пользователей, лучше соответствует стилю бренда и узнаваема во всех типах писем.", "extra": [], "img": "./images/11.webp", "video": false, "poster": "./images/11p.webp"}, {"title": "Лендинг для интерактивного музея", "goal": "Создать современный атмосферный лендинг для запуска интерактивного музея сказок Readles в Дубае.", "task": "Разработать визуальную концепцию, которая сочетает сказочную тематику с атмосферой технологий будущего и AI и понятно показывает интерактивный формат музея.", "role": "Спроектировал дизайн лендинга: концепцию и композицию, решения для технологичной атмосферы, интерактивные блоки и адаптивные версии.", "result": "Цельный лендинг, объединяющий сказку, технологии будущего и AI. Концепция передаёт инновационный характер музея.", "extra": [], "img": "./images/12.webp", "video": false, "poster": "./images/12p.webp"}, {"title": "Редизайн сайта PRO-сервис", "goal": "Повысить эффективность сайта бизнес-коуча, улучшить пользовательский путь и увеличить конверсию.", "task": "Провести аудит сайта на Tilda, найти слабые места в структуре, воронке, конверсии и SEO и определить, как улучшить UX.", "role": "Провёл аудит и предложил улучшения структуры и визуальной подачи. Реализовал редизайн на Tilda: формы, оплата, доставка, CRM, адаптивные версии.", "result": "Обновлены структура и визуальная подача, устранены выявленные проблемы, улучшен пользовательский путь — конверсия сайта выросла.", "extra": [], "img": "./images/13.webp", "video": false, "poster": "./images/13p.webp"}, {"title": "Анимированные баннеры для Olymptrade", "goal": "Создать современные анимированные рекламные баннеры для продвижения fintech-продукта и привлечения внимания потенциальных пользователей.", "task": "Разработать минималистичные горизонтальные баннеры с акцентом на ключевые преимущества продукта. Продумать плавную анимацию и CTA-элементы, используя современные motion-эффекты без визуальной перегруженности.", "role": "", "result": "Созданы лаконичные анимированные баннеры продолжительностью 5–10 секунд в современном fintech-стиле.", "extra": [["Инструменты", "After Effects"]], "img": "./videos/motion-1.mp4", "video": true, "poster": "./images/14p.webp"}, {"title": "Баннер для virtualcards", "goal": "Повысить эффективность рекламы виртуальных карт за счёт создания яркого и заметного анимационного баннера, способного выделиться среди конкурентов и привлечь внимание аудитории.", "task": "Проанализировать рекламные креативы конкурентов, определить эффективные визуальные приёмы и разработать собственную концепцию баннера. Создать статичный макет и дополнить его простой, но выразительной анимацией.", "role": "", "result": "Создан анимационный рекламный баннер с акцентом на визуальную заметность, понятную подачу предложения и привлечение внимания потенциальных клиентов.", "extra": [["Инструменты", "After Effects, Blender"]], "img": "./videos/motion-2.mp4", "video": true, "poster": "./images/15p.webp"}];
@@ -329,6 +332,42 @@ $("theme").onclick = () => {
   root.dataset.theme = dark ? "light" : "dark";
   try { localStorage.setItem("theme", root.dataset.theme); } catch (e) {}
 };
+
+// согласие на cookie: счётчики подключаются только после «Принять»
+const ANALYTICS = "";
+const consentBox = $("consent");
+const getConsent = () => { try { return localStorage.getItem("consent"); } catch (e) { return null; } };
+const setConsent = v => { try { localStorage.setItem("consent", v); } catch (e) {} };
+let analyticsOn = false;
+function loadAnalytics(){
+  if (analyticsOn || !ANALYTICS) return;
+  analyticsOn = true;
+  const tpl = document.createElement("template");
+  tpl.innerHTML = ANALYTICS;
+  tpl.content.querySelectorAll("script").forEach(old => {
+    const s = document.createElement("script");
+    Array.from(old.attributes).forEach(a => s.setAttribute(a.name, a.value));
+    s.text = old.textContent;
+    document.head.appendChild(s);
+  });
+}
+function clearAnalyticsCookies(){
+  const host = location.hostname, parts = host.split(".");
+  const domains = [host, "." + host];
+  for (let i = 1; i < parts.length - 1; i++) domains.push("." + parts.slice(i).join("."));
+  const names = document.cookie.split(";").map(c => c.split("=")[0].trim()).filter(n => /^(_ym|_ga|_gid|_gat|_gcl)/.test(n));
+  names.forEach(n => {
+    domains.forEach(d => { document.cookie = n + "=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; domain=" + d; });
+    document.cookie = n + "=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
+  });
+}
+if (consentBox) {
+  const saved = getConsent();
+  if (saved === "granted") loadAnalytics(); else if (!saved) consentBox.hidden = false;
+  $("consent-yes").onclick = () => { setConsent("granted"); consentBox.hidden = true; loadAnalytics(); };
+  $("consent-no").onclick = () => { const was = analyticsOn; setConsent("denied"); consentBox.hidden = true; clearAnalyticsCookies(); if (was) location.reload(); };
+  $("cookie-settings").onclick = () => { consentBox.hidden = false; $("consent-yes").focus(); };
+}
 
 // копирование почты
 $("copy").onclick = async e => {
